@@ -14,7 +14,6 @@ const  Home = () => {
 
 const styles = {
     main: {
-        backgroundColor: '#A6A999',
          height: '100vh',
     },
 }

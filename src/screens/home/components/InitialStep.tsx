@@ -1,5 +1,8 @@
 import React, {useState, useEffect} from "react";
 import { NAVBAR_HEIGHT, INITIAL_STEP_MASK_VALUE, INITIAL_STEP_BREAKPOINT } from "../../../constants";
+import { FirstStep } from "./FirstStep.tsx";
+import { SecondStep } from "./SecondStep.tsx";
+
 
 let aa = 0
 
@@ -66,30 +69,15 @@ export const InitialStep = () => {
       }
 
     const resetMaskValue = maskIndex => INITIAL_STEP_MASK_VALUE[maskIndex]
-
+    
+    const maskValues = maskImageTransitioner()
 
     return (
-        <div style={{...styles.wrapper, ...maskImageTransitioner()}}
+        <div style={{...styles.wrapper, right: `${scrollValue/100}%`}}
           onScroll={handleScroll}
         >
-            <div style={styles.firstHalf}>
-                <div>
-                    RODRIGAUM
-                </div>
-            </div>
-            <div style={styles.secondHalf}>
-                <div style={styles.secondHalfFirstText}>
-                    A strategic social media and marketing studio
-                    with a common vision of using social media to connect
-                    clients with their audiences.
-                </div>
-                <div style={styles.secondHalfSecondTexWrapper}>
-                    <div style={styles.secondHalfSecondText}>
-                        A gentle rebellious studio who believes content
-                        is fire but social media is gasoline
-                    </div>
-                </div>
-            </div>
+            <FirstStep maskValues={maskValues}/>
+            <SecondStep scrollValue={scrollValue}/>
         </div>
     )
 }
@@ -98,34 +86,14 @@ export const InitialStep = () => {
 const styles = {
     wrapper: {
         display: 'flex',
+        // flexDirection: 'row' as const,
         height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
-        // height: `4000px`,
-        backgroundColor: 'purple',
+        width: '200vw',
+        position: 'relative' as const
+
+
     },
-    firstHalf: {
-        width: '50%',
-        // backgroundColor: 'blue',
-        display: 'flex',
-        alignItems: 'flex-end',
-        fontSize: '75px',
-        fontFamily: 'fantasy',
-    },
-    secondHalf: {
-        width: '50%',
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    secondHalfFirstText: {
-        // backgroundColor: 'purple',
-        paddingTop: '30%'
-        
-    },
-    secondHalfSecondTexWrapper: {
-        // backgroundColor: 'brown',
-        marginTop: 'auto',
-    },
-    secondHalfSecondText: {
-    }
+    
 }
 
 
