@@ -15,6 +15,7 @@ const  Home = () => {
 const styles = {
     main: {
          height: '100vh',
+         overflowX: 'hidden',
     },
 }
 

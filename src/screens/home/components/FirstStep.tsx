@@ -35,6 +35,7 @@ const styles = {
         display: 'flex',
         width: '100vw',
         backgroundColor: '#A6A999',
+        // position: 'absolute'
     },
     firstHalf: {
         width: '50%',

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import { NAVBAR_HEIGHT, INITIAL_STEP_MASK_VALUE, INITIAL_STEP_BREAKPOINT } from "../../../constants";
 import { FirstStep } from "./FirstStep.tsx";
 import { SecondStep } from "./SecondStep.tsx";
+import { transform } from "typescript";
 
 
 let aa = 0
@@ -23,11 +24,18 @@ export const InitialStep = () => {
         const verticalWheel = event.deltaY;
     
         setscrollValue((prevScrollValue) => {
-            const newScrollValue = prevScrollValue + verticalWheel;
+
+            const isPositiveValue = prevScrollValue + verticalWheel >= 0
+
+            const newScrollValue = isPositiveValue
+                ? (prevScrollValue + verticalWheel)
+                : 0
     
             const valueToBeAdded = (verticalWheel / 200) * -1;
     
             setMaskTransitionValuesWrapper(newScrollValue, valueToBeAdded)
+
+            console.log('\n\n newScrollValue', newScrollValue)
     
             return newScrollValue
         });
@@ -37,14 +45,18 @@ export const InitialStep = () => {
         
         return setMaskTransitionValues((prevMaskValueList) => {
 
-            return prevMaskValueList.map((oldMaskValue, maskValueIndex, arr) => {
+            if(newScrollValue === 0) {
+                return INITIAL_STEP_MASK_VALUE
+            }
+
+            const newMaskValueList =  prevMaskValueList.map((oldMaskValue, maskValueIndex, arr) => {
 
                 let newMaskValue
 
                 INITIAL_STEP_BREAKPOINT.forEach( (breakPoint, breakIndex) => {
                     if(newScrollValue > breakPoint && maskValueIndex === arr.length - (breakIndex + 1)) {
                         newMaskValue = maskTransitionValuesConstructor(oldMaskValue, valueToBeAdded)
-                    } else if ( newScrollValue < breakPoint && maskValueIndex === arr.length - (breakIndex + 1)) {
+                    } else if ( newScrollValue < breakPoint && maskValueIndex === arr.length - (breakIndex + 1) ) {
                       newMaskValue = resetMaskValue(maskValueIndex)
 
                     }
@@ -53,6 +65,8 @@ export const InitialStep = () => {
                 return newMaskValue || oldMaskValue
 
             })
+
+            return newMaskValueList
         });
     }
     
@@ -73,11 +87,11 @@ export const InitialStep = () => {
     const maskValues = maskImageTransitioner()
 
     return (
-        <div style={{...styles.wrapper, right: `${scrollValue/100}%`}}
+        <div style={{...styles.wrapper, right: `${(scrollValue/1000)*100}%`}}
           onScroll={handleScroll}
         >
             <FirstStep maskValues={maskValues}/>
-            <SecondStep scrollValue={scrollValue}/>
+            <SecondStep />
         </div>
     )
 }
@@ -89,7 +103,10 @@ const styles = {
         // flexDirection: 'row' as const,
         height: `calc(100% - ${NAVBAR_HEIGHT}px)`,
         width: '200vw',
-        position: 'relative' as const
+        position: 'relative' as const,
+        backgroundColor: '#F6F2EF',
+        transition: 'all .3s ease-out',
+        // backgroundColor: 'red'
 
 
     },
